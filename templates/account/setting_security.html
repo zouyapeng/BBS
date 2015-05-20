@@ -1,0 +1,76 @@
+{% extends 'account/setting.html' %}
+
+
+{% block js %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}js/account_security.js"></script>
+{% endblock %}
+
+{% block tab-content %}
+    <div class="wd-body">
+
+        <form id="password_form"
+              method="put"
+              data-validator
+              action="{% url "password" resource_name="user" api_name='account' %}"
+              data-bv-message="This value is not valid"
+                      data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                      data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                      data-bv-feedbackicons-validating="glyphicon glyphicon-refresh"
+              class="form-horizontal">
+
+            <div class="headline headline-v1">
+                <h4>修改密码</h4>
+            </div>
+            <div class="row">
+                <div id="alert" class="alert col-sm-5 col-sm-offset-1 hide" role="alert"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group">
+                        <label for="id_old_password" class="col-sm-3 control-label">当前密码:</label>
+
+                        <div class="col-sm-9">
+                            <input id="id_old_password"
+                                   data-bv-notempty="true"
+                                   pattern="^[A-Za-z0-9\^$\.\+\*_@!#%&~=-]{6,32}$"
+                                   data-bv-regexp-message="密码只能为6-32位数字,字母及常用符号组成."
+                                    data-bv-notempty-message="当前密码不能为空"
+                                   class="form-control input-sm" name="old_password" type="password"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_password" class="col-sm-3 control-label">新的密码:</label>
+                        <div class="col-sm-9">
+                            <input id="id_password"
+                                   data-bv-different="true" data-bv-different-field="old_password"
+                                   data-bv-different-message="新的密码不能和当前密码一致"
+                                   data-bv-notempty="true"
+                                    data-bv-notempty-message="当前密码不能为空"
+                                   pattern="^[A-Za-z0-9\^$\.\+\*_@!#%&~=-]{6,32}$"
+                                   data-bv-regexp-message="密码只能为6-32位数字,字母及常用符号组成."
+                                   class="form-control input-sm" name="password" type="password"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_re_password" class="col-sm-3 control-label">确认密码:</label>
+                        <div class="col-sm-9">
+                            <input id="id_re_password"
+                                   data-bv-notempty="true"
+                                    data-bv-notempty-message="确认密码不能为空"
+                                    data-bv-identical="true"
+                                    data-bv-identical-field="password"
+                                    data-bv-identical-message="新的密码和确认密码不一致"
+                                   class="form-control input-sm" name="re_password" type="password"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-3">
+                            <button type="submit" class="btn btn-sm btn-success">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

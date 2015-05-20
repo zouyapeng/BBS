@@ -1,0 +1,15 @@
+Django==1.8
+Markdown==2.6.1
+Pillow==2.8.1
+argparse==1.2.1
+django-extensions==1.5.2
+django-jsonfield==0.9.13
+django-model-utils==2.2
+django-pagination==1.0.7
+#django-tastypie==0.12.2-dev
+jieba==0.36.2
+python-dateutil==2.4.2
+python-mimeparse==0.1.4
+simplediff==1.0
+six==1.9.0
+wsgiref==0.1.2

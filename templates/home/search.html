@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% load pagination_tags %}
+{% block title %}搜索{% endblock %}
+
+{% block content %}
+    <div class="content-wrap clearfix">
+        <div class="wd-left col-sm-12 col-md-9">
+            <div class="wd-head clearfix">
+                <h2 class="pull-left">搜索</h2>
+            </div>
+        {% autopaginate object_list DEFAULT_PAGINATION.search %}
+            <ul class="notifications wd-body list-unstyled">
+                {% for obj in object_list %}
+              <li>
+                {% include 'home/search_'|add:obj.content_type.model|add:'.html' %}
+              </li>
+                {% endfor %}
+            </ul>
+        <div class="text-center">
+            {% paginate %}
+        </div>
+        </div>
+        <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+            {% include 'include/right-tab.html' %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'layout.html' %}
+{% load home_tags %}
+{% load pagination_tags %}
+{% block title %}反馈{% endblock %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/article.css"/>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/jquery-waypoints/lib/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/jquery.counterup/jquery.counterup.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/article.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9">
+        <div class="wd-head clearfix">
+            {% if forum %}
+            <h2 class="pull-left"><i class="fa fa-list-ul"></i> {{ forum }} <small>{{ forum.description|summary:100 }}</small></h2>
+            <ul class="nav nav-tabs pull-right hidden-xs hidden-sm">
+                <li {% ifequal request.GET.order_by '-created' %} class="active" {% endifequal %}>
+                    <a href="{% url 'article:list' %}?order_by=-created{% if forum %}&forum={{ forum.id }}{% endif %}">最新反馈</a>
+                </li>
+                <li {% ifnotequal request.GET.order_by '-created' %} class="active" {% endifnotequal %}><a href="{% url 'article:list' %}{% if forum %}?forum={{ forum.id }}{% endif %}">最新回复</a></li>
+            </ul>
+            {% else %}
+            <h2 class="pull-left"><i class="fa fa-list-ul"></i> 反馈</h2>
+            <ul class="nav nav-tabs pull-right hidden-xs hidden-sm">
+                <li {% ifequal request.GET.order_by '-created' %} class="active" {% endifequal %}>
+                    <a href="{% url 'article:list' %}?order_by=-created">最新反馈</a>
+                </li>
+                <li {% ifnotequal request.GET.order_by '-created' %} class="active" {% endifnotequal %}><a href="{% url 'article:list' %}">最新回复</a></li>
+            </ul>
+            {% endif %}
+        </div>
+        <div class="wd-body article-list">
+            {% autopaginate article_list DEFAULT_PAGINATION.article %}
+            {% for article in article_list %}
+            <div class="article-item row li-avatar">
+                <a class="avatar hidden-xs" href="{% url "account:detail" article.user.username %}">
+                    <img class="img-rounded" src="{{ MEDIA_URL }}{{ article.user.avatar }}" alt="">
+                </a>
+                <div class="col-sm-9 article-item-content">
+                    <div class="title">
+                        <a href="{{ article.get_absolute_url }}">
+                           {{ article.title }}
+                        </a>
+                    </div>
+                    <div class="info">
+                        <em><a href="{% url "account:detail" article.user.username %}">{{ article.user }}</a></em>
+                        <em>于 <span >{% wenda_time article.created  %}</span> 发表</em>
+                        <a  href="{% url 'article:list' %}?forum={{ article.forum.id }}">{{ article.forum }}</a>
+                        {% with reply=article.get_last_reply %}
+                        {% if reply %}
+                        <em >最后回复 <span >{% wenda_time reply.created  %}</span></em>
+                        {% endif %}
+                        {% endwith %}
+                        <em class="hidden-sm hidden-md hidden-lg">{{ article.reply_set.count }} 个回复</em>
+                    </div>
+                </div>
+                <div class="col-sm-3 num hidden-xs">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span>回复<em class="ng-binding">{{ article.reply_set.count }}</em></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>浏览<em class="ng-binding">{{ article|history }}</em></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="text-center">
+                {% paginate %}
+            </div>
+        </div>
+    </div>
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+
+{#        <ul class="forum_list list-group">#}
+{#            <li class="list-group-item forum-li">#}
+{#                <a href="{% url 'article:list' %}"><i class="fa fa-list-ul c_999"></i> 所有文章</a>#}
+{#            </li>#}
+{#            {% for forum in forums %}#}
+{#            <li class="list-group-item forum-li">#}
+{#                <a href="{% url 'article:list' %}?forum={{ forum.id }}"><i class="fa fa-list-ul c_999"></i> {{ forum }}</a>#}
+{#                {% with child_forums=forum.child_forums.all %}#}
+{#                {% if child_forums %}#}
+{#                <div class="forum_children">#}
+{#                    <span class="line"></span>#}
+{#                    <ul>#}
+{#                        {% for cf in child_forums%}#}
+{#                        <li class="forum-li">#}
+{#                            <a href="{% url 'article:list' %}?forum={{ cf.id }}"> {{ cf }}</a>#}
+{#                            {% with child_forums=cf.child_forums.all %}#}
+{#                            {% if child_forums %}#}
+{#                            <div class="forum_children">#}
+{#                                <span class="line"></span>#}
+{#                                <ul>#}
+{#                                    {% for cf in child_forums%}#}
+{#                                    <li class="forum-li">#}
+{#                                        <a href="?forum={{ cf.id }}"></i> {{ cf }}</a>#}
+{#                                    </li>#}
+{#                                    {% endfor %}#}
+{#                                </ul>#}
+{#                            </div>#}
+{#                            {% endif %}#}
+{#                            {% endwith %}#}
+{##}
+{#                        </li>#}
+{#                        {% endfor %}#}
+{#                    </ul>#}
+{#                </div>#}
+{#                {% endif %}#}
+{#                {% endwith %}#}
+{#            </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+        <ul></ul>
+        <div class="wd-block forum-con">
+            <ul class="list-unstyled row">
+            <li class="col-sm-6"><span class="num counter">{{ count2 }}</span><span class="text">今日文章数</span></li>
+            <li class="col-sm-6"><span class="num counter">{{ count4 }}</span><span class="text">今日回复数</span></li>
+            <li class="col-sm-6"><span class="num counter">{{ count3 }}</span><span class="text">昨日文章数</span></li>
+            <li class="col-sm-6"><span class="num counter">{{ count1 }}</span><span class="text">总文章数</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

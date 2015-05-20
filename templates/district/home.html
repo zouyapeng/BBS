@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% load home_tags %}
+{% block title %}版块{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/user.css"/>
+
+{% endblock %}
+{#{% block js %}#}
+{#    <script type="text/javascript" src="{{ STATIC_URL }}js/district_home.js"></script>#}
+{#{% endblock %}#}
+
+{% block content %}
+
+<div>
+<h5>Welcome to BBS</h5>
+</div>
+
+
+
+<div class="content-wrap user-list clearfix">
+    {% for district in districts %}
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ district.name }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="content-wrap user-list clearfix">
+                    {% for forum in forums %}
+                        {% if forum.district == district %}
+                            <div class="col-sm-4">
+                                <div class="user-item">
+                                    <div>
+                                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ DISTRICT_ICON_UPLOAD_TO }}{{ forum.icon }}" alt="">
+                                        <a href="{% url "article:list" %}?forum={{ forum.id }}">{{ forum.name }}</a>
+                                    </div>
+                                    <div class="row margin-bottom-6">
+                                        <span class="col-xs-6"><i class="fa fa-file-word-o"></i> 帖子:{{ forum.topic_count }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+
+{% endblock %}

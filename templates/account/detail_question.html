@@ -1,0 +1,29 @@
+{% extends 'account/detail_layout.html' %}
+{% load pagination_tags %}
+{% load home_tags %}
+
+{% block tab-content %}
+    <div class="wd-list wd-body">
+            {% autopaginate questions DEFAULT_PAGINATION.account_question %}
+        {% for question in questions %}
+            <div class="media wd-item">
+                <div class="media-body">
+                    <h5 class="user-name"><a href="{% url 'question:detail' question.id %}">{{ question }}</a></h5>
+                    <div class="opt">
+                        {% if last_answer %}
+                            <a class="wd-user-name" href="{% url "account:detail" last_answer.user.username %}">{{ last_answer.user }}</a> 回复了问题
+                        {% else %}
+                        <a class="wd-user-name" href="{% url "account:detail" question.user.username %}">{{ question.user }}</a> 发起问题
+                        {% endif %}
+				        <span>• {{ question|focus_count }} 人关注 • {{ question.answer_set.count }} 个回复 • 72 次浏览 • {% if last_answer %}{% wenda_time last_answer.created  %}小时前{% else %}{% wenda_time question.created  %}{% endif %}</span>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center empty">没有内容</p>
+        {% endfor %}
+            <div class="text-center">
+                {% paginate %}
+            </div>
+        </div>
+{% endblock %}

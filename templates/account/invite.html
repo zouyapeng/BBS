@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block title %}邀请{% endblock %}
+{% load pagination_tags %}
+{% load home_tags %}
+{% block style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/account-focus.css"/>
+{% endblock %}
+{% block content %}
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9">
+        <div class="wd-head clearfix">
+            <h2 class="pull-left">邀请</h2>
+        </div>
+        <ul class="invite wd-body list-unstyled">
+          {% for item in object_list %}
+              <li class="li-avatar row">
+               <a class="avatar hidden-xs" href="{% url "account:detail" item.sender.username %}">
+                    <img class="img-rounded" src="{{ MEDIA_URL }}{{ item.sender.avatar }}" alt="">
+                </a>
+              <div class="title">
+                  <a href="{{ item.content_object.get_absolute_url }}">{{ item.content_object }}</a>
+              </div>
+              <div class="info">
+                  <em><a href="{{ item.sender.get_absolute_url }}">{{ item.sender.username }}</a></em>
+                  <em>于 <span >{% wenda_time item.created  %}</span> 邀请</em>
+              </div>
+              </li>
+          {% empty %}
+
+              <li>
+              <p class="text-center empty">没有内容</p>
+              </li>
+          {% endfor %}
+        </ul>
+    </div>
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+        {% include 'include/right-tab.html' %}
+    </div>
+</div>
+{% endblock %}

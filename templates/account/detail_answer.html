@@ -1,0 +1,38 @@
+{% extends 'account/detail_layout.html' %}
+{% load pagination_tags %}
+{% load home_tags %}
+
+{% block tab-content %}
+    <ul class="tabs2 text-center list-inline">
+        <li {% ifnotequal request.GET.tab 'answer' %} class="active" {% endifnotequal %}>
+            <a href="{% url 'account:detail_tag' name 'answer'  %}">回复文章</a>
+        </li>
+{#        <li {% ifequal request.GET.tab 'answer' %} class="active" {% endifequal %}>#}
+{#            <a href="{% url 'account:detail_tag' name 'answer'  %}?tab=answer">回复问题</a>#}
+{#        </li>#}
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="article">
+            {% autopaginate objects DEFAULT_PAGINATION.account_answer %}
+            {% for obj in objects %}
+                <div class="wd-item">
+                    <p><a href="{{ obj.get_absolute_url }}">{{ obj.get_markdown|summary:100 }}</a></p>
+                    <div class="opt">
+                        {% ifequal request.GET.tab 'answer' %}
+                            <a href="{{ obj.question.get_absolute_url }}">{{ obj.question }}</a>
+                        {% else %}
+                            <a href="{{ obj.article.get_absolute_url }}">{{ obj.article }}</a>
+                        {% endifequal %}
+                        <span class="pull-right">{% wenda_time obj.created  %}</span>
+                    </div>
+                </div>
+
+            {% empty %}
+            <p class="text-center empty">没有内容</p>
+            {% endfor %}
+            <div class="text-center">
+                {% paginate %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

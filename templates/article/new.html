@@ -1,0 +1,136 @@
+{% extends 'layout.html' %}
+{% load attachments_tags %}
+{% block title %}{% if article %}修改{{ article.title }}{% else %}发起文章{% endif %}{% endblock %}
+{% block style %}
+    {{ block.super }}
+     <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/css/bootstrapValidator.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/blueimp-file-upload/css/jquery.fileupload.css">
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/article-new.css"/>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/underscore/underscore-min.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Converter.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Sanitizer.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Editor.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/jquery-cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/autosize/dest/autosize.min.js"></script>
+
+     <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-load-image/js/load-image.all.min.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/tagmanager/tagmanager.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/typeahead.js/dist/typeahead.jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/article-new.js"></script>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="content-wrap clearfix">
+    <div class="wd-head clearfix">
+        <h2 class="pull-left"><i class="fa fa-pencil-square-o"></i>发起反馈</h2>
+    </div>
+
+    <div class="wd-body wd-body-padding">
+        <form id="form" method="{% if article %}PUT{% else %}POST{% endif %}"
+              data-validator
+              action="{% if article %}{% url 'api_dispatch_detail' pk=article.id resource_name="article" api_name='article' %}{% else %}{% url 'api_dispatch_list' resource_name="article" api_name='article' %}{% endif %}">
+            <div >
+                <label for="id_title">标题:</label>
+                <div class="row">
+                    <div class="col-xs-6 form-group">
+                        <input type="text"
+                               data-bv-notempty="true"
+                               data-bv-stringlength="true"
+                               data-bv-stringlength-max="50"
+                               data-bv-stringlength-min="2"
+                               data-bv-stringlength-message="您的标题为2~50个字，请精简或将更多内容输入到内容中"
+                                data-bv-notempty-message="标题不能为空"
+                               class="form-control" name="title" id="id_title"
+                       value="{{ article.title|default:'' }}"
+                       placeholder="请在此输入标题">
+                    </div>
+                    {% if not article %}
+                    <div class="col-xs-3 form-group">
+                        <select
+                                data-bv-notempty="true"
+                                data-bv-notempty-message="版块不能为空"
+                                name="forum" class="form-control">
+                            <option value="" selected>选择版块</option>
+                            {% for forum in forums %}
+                            <option value="{% url 'api_dispatch_detail' pk=forum.id resource_name="forum" api_name='article' %}">{{ forum.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-xs-3 form-group">
+
+                    </div>
+                {% endif %}
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">内容:</label>
+                <div class="mde-edit">
+                    <div id="mde-button-bar"></div>
+                    <textarea class="mde-input form-control autosize"
+
+                               data-bv-notempty="true"
+                                data-bv-notempty-message="内容不能为空"
+                              id="id_body" rows="15" name="body">{{ article.body|default:'' }}</textarea>
+                </div>
+            </div>
+             <span class="btn btn-default fileinput-button">
+                <span>上传附件</span>
+                <input id="fileupload" type="file" name="file" multiple>
+            </span>
+            <span>允许 : jpg,jpeg,png,gif,zip,doc,docx,rar,pdf,psd,tar.gz, 大小:10M</span>
+            <div class="margin-bottom-10"></div>
+            <div class="row upload-files-preview" id="files">
+                {% if article %}
+                {% get_attachments_for article %}
+                {% for attachment in  attachments %}
+                    <div class="col-xs-4 file-item">
+                        <div class="con">
+                            <div class="preview">
+                                {% autoescape off %}
+                                    {{ attachment|attachment_preview }}
+                                {% endautoescape %}
+                            </div>
+                            {{ attachment.source_filename }}
+                            <div class="meta">
+                                <a class="install" data-id="{{ attachment.id }}" href="javascript:;">插入</a>
+                                <a class="del" data-id="{{ attachment.id }}" href="javascript:;">删除</a>
+                                <input type="hidden" name="attachment" value="{{ attachment.id }}">
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+{#            <hr/>#}
+            <div>
+                <button type="submit" class="btn btn-success">发起您的反馈</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+    <script id="related-tag-template" type="text/template">
+        <ul class="list-unstyled tags-ul">
+            <% _.each(tags, function(tag){ %>
+                <li><a class="tag-item" href="javascript:;"><i class="fa fa-tags"></i> <%=tag%></a></li>
+            <%})%>
+        </ul>
+    </script>
+{% endblock %}

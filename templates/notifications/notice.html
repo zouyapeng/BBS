@@ -1,0 +1,15 @@
+{% load home_tags %}
+<div class="notification {% if notice.unread %}unread{% endif %}">
+    {% if notice.unread %}
+    <i class="tips"></i>
+{% endif %}
+  <p class="verb">
+      <a target="_blank" href="{{ notice.action_object.get_absolute_url }}{% if notice.unread %}?notification={{ notice.id }}{% endif %}"> {{ notice.verb }}</a>
+  </p>
+    <div>
+        {% autoescape off %}
+        {{ notice.description }}
+        {% endautoescape %}
+    </div>
+  <p>{% wenda_time notice.timestamp %} {% if notice.unread %}<a data-notification="{% url 'api_dispatch_detail' pk=notice.id resource_name="notification" api_name='notification' %}" class="pull-right" href="javascript:;">标为已读</a>{% endif %}</p>
+</div>

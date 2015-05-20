@@ -1,0 +1,90 @@
+{% extends 'account/setting.html' %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}bower_components/bootstrap-daterangepicker/moment.js"></script>
+    <script src="{{ STATIC_URL }}bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="{{ STATIC_URL }}js/account_profile.js"></script>
+{% endblock %}
+
+{% block tab-content %}
+    <div class="wd-body">
+        <form class="form-horizontal"
+              method="put"
+              id="profile_form"
+              action="{% url 'api_dispatch_detail' pk=user.id resource_name="user" api_name='account' %}"
+              data-validator>
+            <div class="headline headline-v1">
+                <h4>基本资料</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-1">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">头像:</label>
+                        <div class="col-sm-3">
+                            <img class="img-rounded" src="{{ MEDIA_URL }}{{ user.avatar }}" alt="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">账号:</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-static">{{ user.username }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">性别:</label>
+
+                        <div class="col-sm-9 checkbox">
+                            <label><input value="man" type="radio" {% ifequal user.sex 'man' %} checked {% endifequal %} name="sex"/> 男</label>
+                            <label><input value="female" type="radio" {% ifequal user.sex 'female' %} checked {% endifequal %} name="sex"/> 女</label>
+                            <label><input value="secrecy" type="radio" {% ifequal user.sex 'secrecy' %} checked {% endifequal %} name="sex"/> 保密</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_birthday" class="col-sm-3 control-label">生日:</label>
+
+                        <div class="col-sm-9 checkbox">
+                            <input id="id_birthday" class="form-control input-sm" value="{{ user.birthday|date:'Y-m-d'|default:'' }}" name="birthday" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_signature" class="col-sm-3 control-label">介绍:</label>
+                        <div class="col-sm-9 checkbox">
+                            <input id="id_signature" class="form-control input-sm" value="{{ user.signature|default:'' }}" name="signature" type="text"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="headline headline-v1">
+                <h4>联系方式</h4>
+            </div>
+            <div class="col-sm-6 col-sm-offset-1">
+                <div class="form-group">
+                    <label for="id_qq" class="col-sm-3 control-label">QQ:</label>
+                    <div class="col-sm-9">
+                        <input id="id_qq"
+                               data-bv-regexp-message="QQ必须为数字"
+                               pattern="^[0-9]*$" class="form-control input-sm" value="{{ user.qq|default:'' }}" name="qq" type="text"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_email" class="col-sm-3 control-label">常用邮箱:</label>
+                    <div class="col-sm-9">
+                        <input id="id_email" data-bv-emailaddress-message="邮箱地址错误" value="{{ user.email|default:'' }}" class="form-control input-sm" name="email" type="email"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9 col-sm-offset-2">
+                        <button type="submit" class="btn btn-sm btn-success">保存</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}

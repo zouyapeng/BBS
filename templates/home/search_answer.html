@@ -1,0 +1,13 @@
+{% load home_tags %}
+<div class="li-avatar row">
+    <a class="avatar hidden-xs" href="{{ obj.content_object.user.get_absolute_url }}">
+        <img class="img-rounded" src="{{ MEDIA_URL }}{{ obj.content_object.user.avatar }}" alt="">
+    </a>
+      <div class="title">
+          <a href="{{ obj.content_object.get_absolute_url }}">{% summary_highlight obj.content_object.get_markdown wd_list %}</a>
+      </div>
+      <div class="info">
+          <a class="c_999" href="{{ obj.content_object.question.get_absolute_url }}">{{ obj.content_object.question.title }}</a>
+          <span class="pull-right c_999">{% wenda_time obj.content_object.created %}</span>
+      </div>
+</div>

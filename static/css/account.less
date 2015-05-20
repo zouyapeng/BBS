@@ -1,0 +1,138 @@
+@import "global";
+
+.container-wrap .content-wrap .wd-body{
+
+  &.user-info-sub{
+    min-height: 140px;
+      padding: 20px 20px 20px 140px;
+      border-bottom: 1px solid #e6e6e6;
+      overflow: hidden;
+      position: relative;
+      .info-avatar{
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        img{
+          max-height: 100%;
+        }
+
+      }
+    .profile,
+      .focus_tag{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+
+      }
+  }
+  &.meta{
+      padding: 10px 20px 10px 20px;
+      border-bottom: 1px solid #e6e6e6;
+
+  }
+  &.user-tab{
+    padding: 0px;
+    .nav-tabs{
+      padding: 0 20px;
+    }
+    .tab-content{
+      padding: 10px 0;
+      border-top: 1px solid #e6e6e6;
+
+      .tab-content{
+        padding: 10px 20px;
+      }
+      .wd-item{
+          padding: 14px 0 14px 0px;
+        border-bottom: 1px solid #f5f5f5;
+        p{
+          margin-bottom: 10px;
+        }
+        .opt{
+          color: #ccc;
+          font-size: 12px;
+          a{
+            color: #ccc;
+          }
+        }
+      }
+      .tabs2{
+        a{
+
+            text-decoration: none;
+        }
+        li.active{
+          font-weight: bold;
+          a{
+            color: #000;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+
+.article-list{
+  .article-item();
+   @media (min-width: 68px) {
+     .article-item{
+      padding: 14px 0 14px 0px;
+     }
+
+    }
+}
+
+.attention-content{
+  .item{
+      h4{
+        margin: 0 ;
+        a {
+          font-size: 14px;
+        }
+      }
+  }
+  .focus-content{
+    .item{
+
+      position: relative;
+      padding: 14px 0 14px 50px;
+      .tag-img{
+        position: absolute;
+        left: 0;
+        top: 14px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+  }
+  .question-content{
+    .item{
+      position: relative;
+      padding: 14px 0 14px 50px;
+      border-bottom: 1px solid #F5F5F5;
+      .contribute{
+        .contribute();
+      }
+      a.avatar{
+        position: absolute;
+        left: 0;
+        top: 14px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+}
+
+.right-sidebar{
+  .focus_users{
+    img{
+      width: 24px;
+  height: 24px;
+    }
+
+  }
+}

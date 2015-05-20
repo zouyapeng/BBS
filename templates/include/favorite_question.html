@@ -1,0 +1,38 @@
+{% load home_tags %}
+
+<div class="favorite_question wd-list ">
+    {% with question=item.content_object %}
+    <div class="media wd-item">
+        <div class="media-left avatar hidden-xs">
+            <a href="{{ question.user.get_absolute_url }}">
+                <img class="img-rounded" src="{{ MEDIA_URL }}{{ question.user.avatar }}" alt="">
+            </a>
+        </div>
+        <div class="media-body">
+            <h5 class="user-name"><a href="{{ question.get_absolute_url }}">{{ question.title }}</a></h5>
+            {% with contributes=question.get_contribute %}
+            {% if contributes %}
+            <div class="contribute pull-right hidden-xs">
+                <span>贡献</span>
+                <ul class="list-inline">
+                    {% for contribute in contributes %}
+                    <li><a href="{{ contribute.get_absolute_url }}"><img class="img-circle" src="{{ MEDIA_URL }}{{ contribute.avatar }}"></a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% endwith %}
+            <div class="opt">
+                {% with last_answer=question.get_last_answer %}
+                    {% if last_answer %}
+                        <a class="wd-user-name" href="{{ last_answer.user.get_absolute_url }}">{{ last_answer.user }}</a> 回复了问题
+                    {% else %}
+                <a class="wd-user-name" href="{{ question.user.get_absolute_url }}">{{ question.user }}</a> 发起问题
+                    {% endif %}
+                <span>• {{ question|focus_count }} 人关注 • {{ question.answer_set.count }} 个回复 • 72 次浏览 • {% if last_answer %}{% wenda_time last_answer.created  %}{% else %}{% wenda_time question.created  %}{% endif %} </span>
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+</div>

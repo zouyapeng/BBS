@@ -1,0 +1,7 @@
+.transition-all {
+  -webkit-transition: all 0.35s ease;
+  -moz-transition: all 0.35s ease;
+  -o-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  -ms-transition: all 0.35s ease;
+}

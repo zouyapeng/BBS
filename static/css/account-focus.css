@@ -1,0 +1,25 @@
+.transition-all {
+  -webkit-transition: all 0.35s ease;
+  -moz-transition: all 0.35s ease;
+  -o-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  -ms-transition: all 0.35s ease;
+}
+@media (max-width: 768px) {
+  .article-list .article-item {
+    padding: 14px 0 14px 0px;
+  }
+}
+.article-list .article-item .num span {
+  line-height: 18px;
+  text-align: center;
+  background: #f4f4f4;
+  color: #999;
+  display: block;
+  border-radius: 10px;
+  padding: 4px 0;
+}
+.article-list .article-item .num span em {
+  display: block;
+  font-style: normal;
+}

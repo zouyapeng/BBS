@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+{% load home_tags %}
+{% load attachments_tags %}
+{% load pagination_tags %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/question.css"/>
+{% endblock %}
+{% block js %}
+{% endblock %}
+
+{% block content %}
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9 question-detail">
+
+        <div class="wd-body margin-bottom-40">
+            <div class="question-title clearfix">
+                <h2 class="pull-left">{{ question.title }}</h2>
+                <div class="operate clearfix">
+                    {% focus question %}
+                </div>
+            </div>
+            <div class="post-tags">
+                <ul class="list-unstyled list-inline tags-ul">
+                    <li><i class="fa fa-calendar"></i> {% wenda_time question.created %}</li>
+                    <li><i class="fa fa-pencil"></i> {{ question.user }}</li>
+                    <li><i class="fa fa-eye"></i> {{ question|history }} 个浏览</li>
+                    <li><i class="fa fa-comments"></i> <a href="{{ question.get_absolute_url }}#answers">{{ question.answer_set.count }} 个答案</a></li>
+                    <li>
+                        <i class="fa fa-tags"></i>
+                        {% for tag in question.tag.all %}
+                        <a class="tag-item" href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+                        {% endfor %}
+                    </li>
+                </ul>
+            </div>
+            {% autoescape off %}
+                {{ question.get_markdown|default:''|attachment_sequence }}
+            {% endautoescape %}
+
+        </div>
+        <div class="headline headline-md wd-body answer-head">
+            <div class="opt row">
+                  <div class="col-xs-6 ">
+                    <h3>修改记录</h3>
+                  </div>
+                  <div class="col-xs-6 text-right">
+                  <div class="btn-group btn-group-sm" >
+                          <a href="{% url "question:detail" question.id %}" class="btn btn-link"><i class="fa fa-mail-reply"></i> 返回问题</a>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    <ul class="list-unstyled wd-body">
+        {% for history in questionhistory_set  %}
+        <li class="margin-bottom-20">
+        <h5 class="row">
+            <div class="col-xs-8">{{ history.user }} {{ history.title }}</div>
+            <div class="col-xs-4 text-right">{% wenda_time history.created  %}</div>
+        </h5>
+        {% autoescape off %}
+            {{ history.get_qescription }}
+        {% endautoescape %}
+        </li>
+    {% endfor %}
+    </ul>
+
+
+</div>
+
+<div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+    {% if related_question %}
+        <div class="wd-block">
+            <h4><span>相关问题</span></h4>
+            {% for q in related_question %}
+            <dl>
+                <dt><a href="{{ q.get_absolute_url }}">{{ q.title }}</a></dt>
+                <dd>{{ q|focus_count }} 人关注 • {{ q.answer_set.count }} 个回复</dd>
+            </dl>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="wd-block focus">
+        <h4><span>问题状态</span></h4>
+        <div class="wd-block-padding">
+            <p class="margin-bottom-5">{{question|focus_count }} 人关注该问题</p>
+            <div class="margin-bottom-10">
+            {% for u in question|focus_user %}
+            <a class="user_avatar" href="{{ u.user.get_absolute_url }}">
+                <img class="img-rounded" src="{{ MEDIA_URL }}{{ u.user.avatar }}" alt=""></a>
+            {% endfor %}
+            </div>
+
+            {% with last_answer=question.get_last_answer %}
+            {% if last_answer %}
+            <p class="margin-bottom-10">最后回答: {% wenda_time last_answer.created  %}</p>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

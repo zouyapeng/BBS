@@ -1,0 +1,130 @@
+{% extends 'layout.html' %}
+{% load pagination_tags %}
+{% load home_tags %}
+{% block title %}{{ tag.title }}{% endblock %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/tag.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9 tag-detail">
+        <div class="wd-body">
+            <div class="tag-info-sub margin-bottom-20">
+                <div class="tag-info-avatar">
+                    <a href="" class="tag-img"><img class="img-rounded" src="{{ MEDIA_URL }}{{ tag.avatar }}" alt=""></a>
+                </div>
+                <h2 class="tag-info-title">{{ tag.title }}</h2>
+                <div class="operate clearfix">
+              {% focus tag %}
+                </div>
+            </div>
+
+            <div class="tab-v1">
+                <ul class="nav nav-tabs">
+                    <li {% if not request.GET.tab %}class="active"{% endif %}><a href="{{ tag.get_absolute_url }}" >文章</a></li>
+                    <li {% ifequal request.GET.tab 'question' %}class="active" {% endifequal %}><a href="{{ tag.get_absolute_url }}?tab=question">问题</a></li>
+{#                    <div class="search-bar hidden-xs">#}
+{#                        <input placeholder="在a下搜索" class="form-control" type="text"/>#}
+{#                        <button class="fa fa-search close"></button>#}
+{#                    </div>#}
+                </ul>
+                <div class="tab-content wd-list">
+                    {% autopaginate object_list DEFAULT_PAGINATION.tag_objects %}
+                    {% for object in object_list %}
+                        {% ifequal request.GET.tab 'question' %}
+                            <div class="media wd-item">
+                                <div class="media-left avatar hidden-xs">
+                                     <a href="{{ object.user.get_absolute_url }}">
+                                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ object.user.avatar }}" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h5><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></h5>
+                                        {% with contributes=object.get_contribute %}
+                                        <div class="contribute pull-right hidden-xs">
+                                        {% if contributes %}
+                                            <span>贡献</span>
+                                            <ul class="list-inline">
+                                                {% for contribute in contributes %}
+                                                <li><a href="{{ contribute.get_absolute_url }}"><img class="img-circle" src="{{ MEDIA_URL }}{{ contribute.avatar }}"></a></li>
+                                                {% endfor %}
+                                            </ul>
+                                         {% else %}
+
+                                            <a href="{{ object.get_absolute_url }}#answers">回复</a>
+                                        {% endif %}
+                                        </div>
+                                        {% endwith %}
+                                        <div class="opt">
+                                            {% with last_answer=object.get_last_answer %}
+                                                {% if last_answer %}
+                                                    <a class="wd-user-name" href="{{ last_answer.user.get_absolute_url }}">{{ last_answer.user }}</a> 回复了问题
+                                                {% else %}
+                                            <a class="wd-user-name" href="{{ object.user.get_absolute_url }}">{{ object.user }}</a> 发起问题
+                                                {% endif %}
+                                            <span>• {{ object|focus_count }} 人关注 • {{ object.answer_set.count }} 个回复 • 72 次浏览 • {% if last_answer %}{% wenda_time last_answer.created  %}{% else %}{% wenda_time object.created  %}{% endif %} </span>
+                                            {% endwith %}
+                                        </div>
+
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="li-avatar row">
+                                <div class="media-left avatar hidden-xs">
+                                     <a href="{{ object.user.get_absolute_url }}">
+                                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ object.user.avatar }}" alt="">
+                                    </a>
+                                </div>
+                                <div class="col-sm-9 article-item-content">
+                                    <div class="title"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></div>
+                                    <div class="info">
+                                        <em><a href="{% url "account:detail" object.user.username %}">{{ object.user }}</a></em>
+                                        <em>于 <span >{% wenda_time object.created  %}</span> 发表</em>
+                                        <a  href="{% url 'article:list' %}?forum={{ object.forum.id }}">{{ object.forum }}</a>
+                                        {% with reply=object.get_last_reply %}
+                                        {% if reply %}
+                                        <em> • 最后回复 <span >{% wenda_time reply.created  %}</span></em>
+                                        {% endif %}
+                                        {% endwith %}
+                                        <em class="hidden-sm hidden-md hidden-lg">{{ object.reply_set.count }} 个回复</em>
+                                        <em> • {{ object.reply_set.count }}个回复 • {{ object|history }}个浏览 </em>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endifequal %}
+
+
+                {% empty %}
+              <p class="text-center empty">没有内容</p>
+                    {% endfor %}
+            <div class="text-center">
+                {% paginate %}
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+
+        <div class="wd-block">
+            <h4><span>标签描述</span></h4>
+            <div class="wd-block-padding">{{ tag.describe|default:'' }}</div>
+        </div>
+        <div class="wd-block focus">
+            <h4><span>{{ tag|focus_count }} 人关注该标签</span></h4>
+            <div class="wd-block-padding">
+                {% for u in tag|focus_user %}
+                <a class="user_avatar" href="{{ u.user.get_absolute_url }}">
+                    <img class="img-rounded" src="{{ MEDIA_URL }}{{ u.user.avatar }}" alt=""></a>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

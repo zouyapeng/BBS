@@ -1,0 +1,132 @@
+{% extends 'account/detail_layout.html' %}
+
+{% load pagination_tags %}
+{% load home_tags %}
+{% block tab-content %}
+
+    <ul class="tabs2 text-center list-inline">
+{#        <li {% ifequal tab 'questions' %} class="active" {% endifequal %}>#}
+{#            <a href="{% url 'account:detail_tag' name 'attention'  %}">关注的问题</a>#}
+{#        </li>#}
+{#        <li {% ifequal tab 'tags' %} class="active" {% endifequal %}>#}
+{#            <a href="{% url 'account:detail_tag' name 'attention'  %}?tab=tags">关注的标签</a>#}
+{#        </li>#}
+        <li {% ifequal tab 'users' %} class="active" {% endifequal %}>
+            <a href="{% url 'account:detail_tag' name 'attention'  %}?tab=users">关注的用户</a>
+        </li>
+        <li {% ifequal tab 'articles' %} class="active" {% endifequal %}>
+            <a href="{% url 'account:detail_tag' name 'attention'  %}?tab=articles">关注的文章</a>
+        </li>
+    </ul>
+    <div class="tab-content attention-content">
+        {% autopaginate objects DEFAULT_PAGINATION.account_attention %}
+        {% ifequal tab 'questions' %}
+        <div class="question-content" >
+            <ul class="list-unstyled">
+                {% for item in objects %}
+                {% with obj=item.content_object %}
+                <li class="item">
+                    <a class="avatar" href="{% url "account:detail" obj.user.username %}">
+                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ obj.user.avatar }}" alt="">
+                    </a>
+                    <p class="c_999">{{ obj.answer_set.count }} 个回复 • {{ obj.get_last_history.title }} • {% wenda_time obj.get_last_history.created  %}</p>
+
+                    {% with contributes=obj.get_contribute %}
+                    {% if contributes %}
+                    <div class="contribute pull-right hidden-xs">
+                        <span>贡献</span>
+                        <ul class="list-inline">
+                            {% for contribute in contributes %}
+                            <li><a href="{% url "account:detail" user.username %}"><img class="img-circle" src="{{ MEDIA_URL }}{{ user.avatar }}"></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                    <h4>
+                        <a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a>
+                    </h4>
+                </li>
+                {% endwith %}
+                {% empty %}
+                <li><p class="text-center empty">没有内容</p></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endifequal %}
+        {% ifequal tab 'tags' %}
+            <div class="focus-content">
+                {% for item in objects %}
+                {% with tag=item.content_object %}
+                <div class="col-sm-6 item">
+                    <a href="{{ tag.get_absolute_url }}" class="tag-img"><img class="img-rounded" src="{{ MEDIA_URL }}{{ tag.avatar }}" alt=""></a>
+                    <h4><a href="{{ tag.get_absolute_url }}"><i class="fa fa-tags"></i> {{ tag.title }}</a></h4>
+                    <p>{{ tag.question_set.count }} 个讨论	• {{ tag|focus_count }} 个关注</p>
+                </div>
+                {% endwith %}
+                {% empty %}
+                <p class="text-center empty">没有内容</p>
+                {% endfor %}
+            </div>
+        {% endifequal %}
+
+        {% ifequal tab 'users' %}
+        <div class="focus-content">
+            {% for item in objects %}
+            <div class="col-sm-6 item">
+                <a class="tag-img" href="{% url "account:detail" item.user.username %}">
+                    <img class="img-rounded" src="{{ MEDIA_URL }}{{ item.user.avatar }}">
+                    <h4><a href="{{ item.user.get_absolute_url }}">{{ item.user.username }}</a></h4>
+                    <div>
+{#                        <i class="fa fa-question"></i> 发问:{{ item.user.question_set.count }}&nbsp;&nbsp;#}
+                        <i class="fa fa-file-word-o"></i> 文章:{{ item.user.article_set.count }}
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endifequal %}
+        {% ifequal tab 'articles' %}
+        <div class="question-content">
+
+            <ul class="list-unstyled">
+            {% for item in objects %}
+                {% with obj=item.content_object %}
+                <li class="item">
+                    <a class="avatar" href="{% url "account:detail" obj.user.username %}">
+                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ obj.user.avatar }}" alt="">
+                    </a>
+                    <p class="c_999">{{ obj.reply_set.count }} 个回复 • {{ obj.get_last_history.title }} • {% wenda_time obj.get_last_history.created  %}</p>
+
+                    {% with contributes=obj.get_contribute %}
+                    {% if contributes %}
+                    <div class="contribute pull-right hidden-xs">
+                        <span>贡献</span>
+                        <ul class="list-inline">
+                            {% for contribute in contributes %}
+                            <li><a href="{% url "account:detail" contribute.username %}"><img class="img-circle" src="{{ MEDIA_URL }}{{ contribute.avatar }}"></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                    <h4>
+                        <a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a>
+                    </h4>
+                </li>
+                    {% endwith %}
+                {% empty %}
+                <li><p class="text-center empty">没有内容</p></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endifequal %}
+
+            <div class="text-center">
+                {% paginate %}
+            </div>
+
+
+
+    </div>
+{% endblock %}

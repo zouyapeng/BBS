@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block title %}标签广场{% endblock %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/tag.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9 question-detail">
+        <div class="wd-head clearfix">
+            <h2 class="pull-left"><i class="fa fa-tags"></i> 标签广场</h2>
+        </div>
+        <div class="wd-body">
+            {% for tag in tag_list %}
+            <div class="col-sm-6 tag-item">
+                <a href="{{ tag.get_absolute_url }}" class="tag-img"><img class="img-rounded" src="{{ MEDIA_URL }}{{ tag.avatar }}" alt=""></a>
+                <div>
+                    <h5><a class="tag-item" href="{{ tag.get_absolute_url }}"><i class="fa fa-tags"></i> {{ tag.title }}</a></h5>
+                    <p>{{ tag.question_set.count }}个问题 {{ tag.article_set.count }}篇文章</p>
+                    <p>{{ tag.get_week_count }} 本周, {{ tag.get_30_count }} 30 天</p>
+                </div>
+            </div>
+                {% empty %}
+              <p class="text-center empty">没有内容</p>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+
+        <div class="wd-block">
+            <h4><span>新增标签</span></h4>
+            <ul class="list-unstyled tags-ul margin-bottom-30 wd-block-padding">
+                {% for tag in new_tag %}
+                <li><a class="tag-item" href="{{ tag.get_absolute_url }}"><i class="fa fa-tags"></i> {{ tag.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="wd-block">
+            <h4><span>热门标签</span></h4>
+            <ul class="list-unstyled tags-ul margin-bottom-30 wd-block-padding">
+                {% for tag in popular %}
+                <li><a class="tag-item" href="{% url 'tag:tag_detail' tag.2 %}"><i class="fa fa-tags"></i> {{ tag.2 }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

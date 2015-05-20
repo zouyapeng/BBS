@@ -1,0 +1,14 @@
+{% load home_tags %}
+<div class="li-avatar row">
+    <a class="avatar hidden-xs" href="{{ obj.content_object.get_absolute_url }}">
+        <img class="img-rounded" src="{{ MEDIA_URL }}{{ obj.content_object.avatar }}" alt="">
+    </a>
+      <div class="title">
+          <a href="{{ obj.content_object.get_absolute_url }}">{% summary_highlight obj.content_object.username wd_list %}</a>
+          <em><i class="fa fa-question"></i> 发问:{{ obj.content_object.question_set.count }} </em>&nbsp;&nbsp;
+          <em><i class="fa fa-file-word-o"></i> 文章:{{ obj.content_object.article_set.count }}</em>
+      </div>
+      <div class="info">
+          {% summary_highlight obj.content_object.signature wd_list %}
+      </div>
+</div>

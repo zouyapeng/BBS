@@ -1,0 +1,274 @@
+{% extends 'layout.html' %}
+{% load home_tags %}
+{% load attachments_tags %}
+{% load pagination_tags %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/blueimp-file-upload/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/article-detail.css"/>
+{% endblock %}
+
+{% block js %}
+     <script type="text/javascript" src="{{ STATIC_URL }}bower_components/underscore/underscore-min.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Converter.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Sanitizer.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Editor.js"></script>
+                                                                                                                                                                                                                <script type="text/javascript" src="{{ STATIC_URL }}bower_components/autosize/dest/autosize.min.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-load-image/js/load-image.all.min.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
+
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/markdown_edit.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/article-detail.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9">
+        <div class="wd-body margin-bottom-40">
+            <div class="article-title clearfix margin-bottom-10">
+                <h2 class="pull-left">{{ article.title }}</h2>
+
+                <div class="operate clearfix">
+                      {% focus article %}
+                </div>
+            </div>
+            {% autoescape off %}
+                {{ article.get_markdown|default:''|attachment_sequence }}
+            {% endautoescape %}
+
+            <div class="opt row">
+
+                <div class="col-xs-8">
+                    <div class="btn-group btn-group-sm" >
+                          {% answer_vote article %}
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-link open-comment"
+                                data-resource="{% url 'api_dispatch_list' resource_name="comment" api_name='account' %}?object_id={{ article.id }}&content_type={{ article|content_type }}"
+                                data-comment-content=".question-comment-content"  ><i class="fa fa-comments-o"></i> <span class="count">{{ article|comment_count }}</span>条评论</button>
+
+                    </div>
+
+                    {% if request.user.is_authenticated %}
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'article:edit' article.id %}" class="btn btn-link"><i class="fa fa-edit"></i> 修改</a>
+                    </div>
+                    {% endif %}
+                     <div class="btn-group btn-group-sm" >
+                          {% favorite article %}
+                    </div>
+                </div>
+            </div>
+
+        <div class="wd-comment question-comment-content">
+                <div class="wd-comment-list">
+                    <p class="text-center empty">暂无评论</p>
+                    <p class="text-center loading"><img src="{{ STATIC_URL }}img/preloader-w8-line-black.gif"></p>
+                    <ul class="list-unstyled">
+
+                    </ul>
+                </div>
+                <div class="wd-comment-form">
+                    {% is_authenticated %}
+                    <form data-validator method="post" action="{% url 'api_dispatch_list' resource_name="comment" api_name='account' %}" >
+                    <div class="form-group">
+                        <textarea class="form-control autosize "
+                                  data-bv-notempty="true"
+                            data-bv-notempty-message="评论内容不能为空"
+                                  rows="1" name="body" placeholder="评论一下..." ></textarea>
+                        <input name="content_object" value="{% url 'api_dispatch_detail' resource_name="article" pk=article.id api_name='article' %}" type="hidden">
+                        </div>
+                        <div class="wd-comment-box-btn text-right">
+                            <button type="submit" class="btn btn-sm btn-success">评论</button>
+                        </div>
+                    </form>
+                    {% endis_authenticated %}
+                </div>
+            </div>
+        </div>
+
+        <div class="headline headline-md wd-body reply-head"><h3><span class="answers_count">{{ article.reply_set.count }}</span> 个回复</h3></div>
+
+        <div class="wd-body replies">
+            <div class="margin-bottom-20">
+                {% with replies=article.reply_set.all %}
+                {% autopaginate replies DEFAULT_PAGINATION.reply %}
+                    {% for reply in replies %}
+                    <div class="media reply-item" id="reply-{{ reply.id }}">
+                      <div class="media-left hidden-xs">
+                        <a href="{% url "account:detail" reply.user.username %}">
+                          <img class="img-rounded" src="{{ MEDIA_URL }}{{ reply.user.avatar }}" >
+                        </a>
+                      </div>
+                      <div class="media-body">
+                          <h5 class="user-name row">
+                          <div class="col-xs-9">
+                              <a href="{% url "account:detail" reply.user.username %}">{{ reply.user }}</a>
+                          </div>
+                          <div class="col-sm-3 text-right">{% wenda_time reply.created  %}</div>
+                          </h5>
+                        {% autoescape off %}
+                            {{ reply.get_markdown|default:''|attachment_sequence }}
+                        {% get_attachments_for_filte reply reply.body %}
+                        {% for attachment in attachments %}
+                            {{ attachment|attachment_a_preview }}
+                        {% endfor %}
+                        {% endautoescape %}
+                          <div class="opt">
+                            <div class="btn-group btn-group-sm" >
+                                <button
+                                        data-resource="{% url 'api_dispatch_list' resource_name="comment" api_name='account' %}?object_id={{ reply.id }}&content_type={{ reply|content_type }}"
+                                        data-comment-content=".reply-comment-content{{ reply.id }}" type="button" class="btn btn-default open-comment"><i class="fa fa-comments-o"></i> <span class="count">{{ reply|comment_count }}</span></button>
+                            </div>
+                        </div>
+                       <div class="wd-comment reply-comment-content{{ reply.id }}">
+                                <div class="wd-comment-list">
+                                    <p class="text-center empty">暂无评论</p>
+                                    <p class="text-center loading"><img src="{{ STATIC_URL }}img/preloader-w8-line-black.gif"></p>
+                                    <ul class="list-unstyled">
+
+                                    </ul>
+                                </div>
+                                <div class="wd-comment-form">
+                                    {% is_authenticated %}
+                                    <form data-validator method="post" action="{% url 'api_dispatch_list' resource_name="comment" api_name='account' %}" >
+                                    <div class="form-group">
+                                        <textarea class="form-control autosize "
+                                                  data-bv-notempty="true"
+                                            data-bv-notempty-message="评论内容不能为空"
+                                                  rows="1" name="body" placeholder="评论一下..." ></textarea>
+                                        <input name="content_object" value="{% url 'api_dispatch_detail' resource_name="reply" pk=article.id api_name='article' %}" type="hidden">
+                                        </div>
+                                        <div class="wd-comment-box-btn text-right">
+                                            <button type="submit" class="btn btn-sm btn-success">评论</button>
+                                        </div>
+                                    </form>
+                                    {% endis_authenticated %}
+                                </div>
+                            </div>
+
+                      </div>
+                    </div>
+                    {% endfor %}
+                    <div class="text-center">
+                        {% paginate %}
+                    </div>
+                {% endwith %}
+
+            </div>
+
+            {% is_authenticated %}
+            <form method="POST" data-validator
+                  action="{% url 'api_dispatch_list' resource_name="reply" api_name='article' %}"
+                  id="reply_form" class="answer_form">
+                <div class="form-group">
+                <div class="mde-edit margin-bottom-20 ">
+                    <div id="mde-button-bar"></div>
+                    <textarea
+                            data-bv-notempty="true"
+                            data-bv-notempty-message="回复内容不能为空"
+                            class="mde-input form-control autosize" id="id_body" rows="15" name="body"></textarea>
+                </div>
+                    </div>
+                <div class="margin-bottom-20 row">
+                    <input type="hidden" value="{% url 'api_dispatch_detail' resource_name="article" pk=article.id api_name='article' %}" name="article"/>
+                    <div class="col-xs-10">
+                          <span class="btn btn-default fileinput-button">
+                            <span>上传附件</span>
+                            <input id="fileupload" type="file" name="file" multiple>
+                        </span>
+                        <span>允许 : jpg,jpeg,png,gif,zip,doc,docx,rar,pdf,psd,tar.gz, 大小:10M</span>
+                    </div>
+                    <div class="col-xs-2 text-right"><button type="submit" class="btn btn-success">回复</button></div>
+                </div>
+
+                <div class="margin-bottom-10"></div>
+                <div class="row upload-files-preview" id="files">
+                </div>
+            </form>
+            <div id="mde-preview" class="hide wmd-panel well mde-preview"></div>
+            {% endis_authenticated %}
+        </div>
+
+
+    </div>
+
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+          <div class="wd-block">
+            <h4><span>发起人</span></h4>
+            <dl class="sponsors clearfix">
+                <dt class="pull-left">
+                     <a href="{{ article.user.get_absolute_url }}">
+                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ article.user.avatar }}" alt="">
+                    </a>
+                </dt>
+                <dd class="pull-left">
+                     <a href="{{ article.user.get_absolute_url }}">
+                    {{ article.user }}</a>
+{#                    <p>{{ article.user.signature | summary:20 }}</p>#}
+                    <p>{{ article.user.signature}}</p>
+                </dd>
+            </dl>
+        </div>
+        {% if related_article %}
+        <div class="wd-block">
+            <h4><span>相关文章</span></h4>
+            {% for q in related_article %}
+            <dl>
+                <dt><a href="{{ q.get_absolute_url }}">{{ q.title }}</a></dt>
+                <dd>{{ q|focus_count }} 人关注 • {{ q.reply_set.count }} 个回复</dd>
+            </dl>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="wd-block focus">
+            <h4><span>文章状态</span></h4>
+            <div class="wd-block-padding">
+                {% with last_reply=article.get_last_reply %}
+                {% if last_reply %}
+                <p class="margin-bottom-10">最后回复: {% wenda_time last_reply.created  %}</p>
+                {% endif %}
+                {% endwith %}
+                <p class="margin-bottom-10">浏览: {{ article|history }}</p>
+                <p class="margin-bottom-5">{{article|focus_count }} 人关注该文章</p>
+                {% for u in article|focus_user %}
+                <a class="user_avatar" href="{{ u.user.get_absolute_url }}">
+                    <img class="img-rounded" src="{{ MEDIA_URL }}{{ u.user.avatar }}" alt=""></a>
+                {% endfor %}
+                <p class="margin-bottom-10"></p>
+                <p class="margin-bottom-5">{{ article.tag.count }} 个文章标签 </p>
+                <p>
+                {% for tag in article.tag.all %}
+                    <a class="tag-item" href="{{ tag.get_absolute_url }}"><i class="fa fa-tags"></i> {{ tag.title }}</a>
+                {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script id="comment-template" type="text/template">
+    <li>
+        <a class="avatar" href="<%-user.absolute_url%>" ><img class="img-rounded" src="<%-user.avatar%>" alt=""></a>
+        <div>
+            <p class="clearfix">
+                <a href="<%-user.absolute_url%>" class="aw-user-name author"><%-user.username%></a>
+             • <span><%-created%></span>
+        </p>
+        <p class="clearfix"><%-body%></p>
+        </div>
+    </li>
+</script>
+{% endblock %}

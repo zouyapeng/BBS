@@ -1,0 +1,39 @@
+{% load home_tags %}
+
+<div class="favorite_article article-list">
+    {% with article=item.content_object %}
+    <div class="article-item row li-avatar">
+        <a class="avatar hidden-xs" href="{% url "account:detail" article.user.username %}">
+            <img class="img-rounded" src="{{ MEDIA_URL }}{{ article.user.avatar }}" alt="">
+        </a>
+        <div class="col-sm-9 article-item-content">
+            <div class="title">
+                <a href="{{ article.get_absolute_url }}">
+                   {{ article.title }}
+                </a>
+            </div>
+            <div class="info">
+                <em><a href="{% url "account:detail" article.user.username %}">{{ article.user }}</a></em>
+                <em>于 <span >{% wenda_time article.created  %}</span> 发表</em>
+                <a  href="{% url 'article:list' %}?forum={{ article.forum.id }}">{{ article.forum }}</a>
+                {% with reply=article.get_last_reply %}
+                {% if reply %}
+                <em >最后回复 <span >{% wenda_time reply.created  %}</span></em>
+                {% endif %}
+                {% endwith %}
+                <em class="hidden-sm hidden-md hidden-lg">{{ article.reply_set.count }} 个回复</em>
+            </div>
+        </div>
+        <div class="col-sm-3 num hidden-xs">
+            <div class="row">
+                <div class="col-sm-6">
+                    <span>回复<em class="ng-binding">{{ article.reply_set.count }}</em></span>
+                </div>
+                <div class="col-sm-6">
+                    <span>浏览<em class="ng-binding">4</em></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+</div>

@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block title %}收藏{% endblock %}
+{% load pagination_tags %}
+{% block style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/account-focus.css"/>
+{% endblock %}
+{% block content %}
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9">
+        <div class="wd-head clearfix">
+            <h2 class="pull-left">收藏的{{ c_content_type }}</h2>
+             <ul class="nav nav-tabs pull-right hidden-xs hidden-sm">
+                {% for content_type in content_types %}
+                <li {% ifequal c_content_type content_type %} class="active" {% endifequal %}><a href="{% url 'account:favorite' %}?content_type={{ content_type.id }}">{{ content_type }}</a></li>
+                {% endfor %}
+             </ul>
+        </div>
+        <div class="wd-body">
+          {% for item in object_list %}
+              {% include 'include/favorite_'|add:c_content_type.model|add:'.html' %}
+          {% empty %}
+              <p class="text-center empty">没有内容</p>
+          {% endfor %}
+        </div>
+    </div>
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+        {% include 'include/right-tab.html' %}
+    </div>
+</div>
+{% endblock %}

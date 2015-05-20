@@ -1,0 +1,21 @@
+.user-list {
+  padding: 20px;
+}
+.user-list .user-item {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  margin: 10px 0;
+}
+.user-list .user-item hr {
+  margin: 12px 0 10px;
+}
+.user-list .user-item img {
+  float: left;
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+}
+.user-list .user-item .name {
+  overflow: hidden;
+}

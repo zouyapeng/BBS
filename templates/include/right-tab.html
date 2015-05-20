@@ -1,0 +1,11 @@
+<ul class="list-unstyled right-tab list-group">
+    <a class="list-group-item" href="{% url 'notifications:all' %}"><i class="fa fa-bell-o"></i> 通知</a>
+    <a class="list-group-item" href="{% url 'account:favorite' %}"><i class="fa fa-star-o"></i> 收藏</a>
+    <a class="list-group-item" href="{% url 'account:invite' %}"><i class="fa fa-inbox"></i> 邀请我回复的问题</a>
+</ul>
+<div class="wd-block">
+    <ul class="list-unstyled right-tab list-group">
+{#    <a class="list-group-item" href="{% url 'tag:tag_list' %}"><i class="fa fa-tags"></i> 所有标签</a>#}
+    <a class="list-group-item" href="{% url 'account:home' %}"><i class="fa fa-star-o"></i> 所有用户</a>
+</ul>
+</div>

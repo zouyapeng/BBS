@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% load pagination_tags %}
+{% block title %}({{ unread_count }})通知{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/notification.css"/>
+{% endblock %}
+{% block content %}
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9">
+        <div class="wd-head clearfix">
+            <h2 class="pull-left">通知</h2>
+        </div>
+        {% autopaginate notifications DEFAULT_PAGINATION.notification %}
+        <ul class="notifications wd-body list-unstyled">
+          {% for notice in notifications %}
+            {% include 'notifications/notice.html' %}
+          {% empty %}
+              <li>
+              <p class="text-center empty">没有内容</p>
+              </li>
+          {% endfor %}
+        </ul>
+        <div class="text-center">
+            {% paginate %}
+        </div>
+    </div>
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+        {% include 'include/right-tab.html' %}
+    </div>
+</div>
+{% endblock %}

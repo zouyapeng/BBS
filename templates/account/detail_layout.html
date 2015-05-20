@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+{% load home_tags %}
+{% block title %}{{ object.username }}{% endblock %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/account.css"/>
+{% endblock %}
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/jquery-waypoints/lib/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/jquery.counterup/jquery.counterup.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/account_detail.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-wrap clearfix">
+
+    <div class="wd-left col-sm-12 col-md-9">
+
+        <div class="user-info-sub wd-body">
+            <div class="info-avatar">
+                <img class="img-rounded" src="{{ MEDIA_URL }}{{ object.avatar }}" alt="">
+            </div>
+            <div class="info-username">{{ object.username }}</div>
+            {% if object.signature %}
+                <p >{{ object.signature }}</p>
+            {% endif %}
+
+            {% ifequal request.user user %}
+            <a href="{% url 'account:setting' 'profile' %}" class="btn btn-success btn-sm profile">编辑</a>
+            {% else %}
+                {% focus user %}
+            {% endifequal %}
+        </div>
+        <div class="meta wd-body margin-bottom-10">
+            <div class="row">
+            <span class="col-xs-3"><i class="fa fa-thumbs-o-up"></i> 赞同：<span class="counter">{{ vote_count }}</span></span>
+            <span class="col-xs-3"><i class="fa fa-heart-o"></i> 感谢：<span class="counter">{{ thank_count }}</span></span>
+{#            <span class="col-xs-3"><i class="fa fa-question"></i> 发问：<span class="counter">{{ question_count }}</span></span>#}
+            <span class="col-xs-3"><i class="fa fa-file-word-o"></i> 文章：<span class="counter">{{ article_count }}</span></span>
+                </div>
+        </div>
+
+        <div class="user-tab tab-v1 wd-body margin-bottom-10">
+            <ul class="nav nav-tabs">
+                <li {% if not tag %} class="active" {% endif %}>
+                    <a href="{% url 'account:detail' name %}">动态</a>
+                </li>
+{#                <li {% ifequal tag 'question' %} class="active" {% endifequal %}>#}
+{#                    <a href="{% url 'account:detail_tag' name 'question'  %}">问题</a>#}
+{#                </li>#}
+                <li {% ifequal tag 'answer' %} class="active" {% endifequal %}>
+                    <a href="{% url 'account:detail_tag' name 'answer'  %}">回复</a>
+                </li>
+                <li {% ifequal tag 'article' %} class="active" {% endifequal %}>
+                    <a href="{% url 'account:detail_tag' name 'article'  %}">文章</a>
+                </li>
+                <li {% ifequal tag 'attention' %} class="active" {% endifequal %}>
+                    <a href="{% url 'account:detail_tag' name 'attention'  %}">关注</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                {% block tab-content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+        <div class="wd-block ">
+            <h4><span>关注 {{ focus_user_count }} 人 </span> <a class="pull-right" href="{% url 'account:detail_tag' name 'attention'  %}?tab=users">更多&gt;</a></h4>
+            <div class="wd-block-padding focus_users">
+                {% for focus_user in focus_users %}
+                    <a href="{{ focus_user.content_object.get_absolute_url }}">
+                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ focus_user.content_object.avatar }}" alt="">
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% if focus_users1 %}
+            <div class="wd-block ">
+                <h4><span>被 {{ focus_users1.count }} 人关注 </span> </h4>
+                <div class="wd-block-padding focus_users">
+                    {% for focus_user in focus_users1 %}
+                        <a href="{{ focus_user.user.get_absolute_url }}">
+                            <img class="img-rounded" src="{{ MEDIA_URL }}{{ focus_user.user.avatar }}" alt="">
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="wd-block">
+            <h4><span>关注 {{ focus_tag_count }} 话题 </span> <a class="pull-right" href="{% url 'account:detail_tag' name 'attention'  %}?tab=tags">更多&gt;</a></h4>
+            <ul class="list-unstyled tags-ul margin-bottom-30 wd-block-padding">
+                {% for focus_tag in focus_tags %}
+                <li><a class="tag-item" href="{{ focus_tag.content_object.get_absolute_url }}"><i class="fa fa-tags"></i> {{ focus_tag.content_object.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <p class="c_999">主页访问量 : {{ object|history }}  次访问</p>
+    </div>
+</div>
+{% endblock %}

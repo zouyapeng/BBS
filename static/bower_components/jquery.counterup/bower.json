@@ -1,0 +1,21 @@
+{
+  "name": "jquery.counterup",
+  "version": "0.0.0",
+  "main": "jquery.counterup.min.js",
+  "homepage": "https://github.com/cmincarelli/jquery.counterup",
+  "authors": [
+    "Chris Mink <chrism-air@local>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

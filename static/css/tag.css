@@ -1,0 +1,40 @@
+.tag-item {
+  position: relative;
+  padding: 20px 5px 20px 65px;
+  border-bottom: 1px solid #f5f5f5;
+}
+.tag-item .tag-img {
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+.tag-item h5 {
+  margin: 0px 0px 5px;
+}
+.tag-item h5 a {
+  padding: 3px 5px;
+}
+.tag-item p {
+  color: #999;
+}
+.tag-detail .tag-info-sub {
+  min-height: 90px;
+  padding: 20px 20px 20px 80px;
+  border-bottom: 1px dashed #E9E9E9;
+  overflow: hidden;
+  position: relative;
+}
+.tag-detail .tag-info-sub .tag-info-avatar {
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+.tag-detail .tag-info-sub .tag-info-title {
+  margin: 0;
+  font-size: 20px;
+}
+.tag-detail .tag-info-sub .operate {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}

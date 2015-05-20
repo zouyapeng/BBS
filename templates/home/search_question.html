@@ -1,0 +1,22 @@
+{% load home_tags %}
+<div class="li-avatar row">
+    <a class="avatar hidden-xs" href="{{ obj.content_object.user.get_absolute_url }}">
+        <img class="img-rounded" src="{{ MEDIA_URL }}{{ obj.content_object.user.avatar }}" alt="">
+    </a>
+      <div class="title">
+          <a href="{{ obj.content_object.get_absolute_url }}">{% summary_highlight obj.content_object.body wd_list %}</a>
+      </div>
+      <div class="info c_999">
+          {% summary_highlight obj.content_object.body wd_list %}
+      </div>
+      <div class="info c_999">
+          {% with last_answer=obj.content_object.get_last_answer %}
+                {% if last_answer %}
+                    <a class="wd-user-name" href="{{ last_answer.user.get_absolute_url }}">{{ last_answer.user }}</a> 回复了问题
+                {% else %}
+            <a class="wd-user-name" href="{{ obj.content_object.user.get_absolute_url }}">{{ obj.content_object.user }}</a> 发起问题
+                {% endif %}
+            <span>• {{ obj.content_object|focus_count }} 人关注 • {{ obj.content_object.answer_set.count }} 个回复 • {{ obj.content_object|history }} 次浏览 • {% if last_answer %}{% wenda_time last_answer.created  %}{% else %}{% wenda_time obj.content_object.created  %}{% endif %} </span>
+            {% endwith %}
+      </div>
+</div>

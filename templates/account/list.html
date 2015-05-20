@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% load home_tags %}
+{% block title %}用户{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/user.css"/>
+{% endblock %}
+{% block js %}
+{% endblock %}
+
+{% block content %}
+<div class="content-wrap user-list clearfix">
+    {% for user in object_list %}
+    <div class="col-sm-4">
+        <div class="user-item">
+            <a href="{% url "account:detail" user.username %}"><img class="img-rounded" src="/media/default.png" alt=""></a>
+
+            <div class="name">
+                <strong><a href="{% url "account:detail" user.username %}">{{ user.username }}</a></strong>
+                <p>{{ user.signature|default:'' }}</p>
+            </div>
+            <div class="row margin-bottom-8">
+                <span class="col-xs-6"><i class="fa fa-file-word-o"></i> 文章: {{ user.article_set.count }}</span>
+            </div>
+
+            <hr>
+            <ul class="list-inline share-list">
+                <li>{% focus user %}</li>
+            </ul>
+        </div>
+    </div>
+   {% endfor %}
+</div>
+{% endblock %}

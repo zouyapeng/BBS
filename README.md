@@ -1,2 +1,1 @@
-# BBS
-BBS by Django
+This is BBS

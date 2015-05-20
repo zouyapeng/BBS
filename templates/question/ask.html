@@ -1,0 +1,148 @@
+{% extends 'layout.html' %}
+{% load attachments_tags %}
+{% block title %}{% if question %}修改{{ question.title }}{% else %}发起问题{% endif %}{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/css/bootstrapValidator.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/blueimp-file-upload/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/question.css"/>
+{% endblock %}
+{% block js %}
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/tagmanager/tagmanager.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/typeahead.js/dist/typeahead.jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Converter.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Sanitizer.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/MarkdownEdit/Markdown.Editor.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/autosize/dest/autosize.min.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-load-image/js/load-image.all.min.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ask.js"></script>
+
+{% endblock %}
+
+{% block content %}
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9 question-ask">
+        <div class="wd-head clearfix">
+            <h2 class="pull-left"><i class="fa fa-plus-square-o"></i> 发起问题</h2>
+        </div>
+
+        <div class="wd-body wd-body-padding">
+            <form id="form" method="{% if question %}PUT{% else %}POST{% endif %}" action="{% if question %}{% url 'api_dispatch_detail' pk=question.id resource_name="question" api_name='question' %}{% else %}{% url 'api_dispatch_list' resource_name="question" api_name='question' %}{% endif %}">
+                <div class="form-group">
+                    <label for="id_title">标题:</label>
+                    <input type="text" class="form-control" name="title" id="id_title" value="{{ question.title|default:'' }}" placeholder="你有什么问题，请在此输入">
+                </div>
+                <div class="form-group hide related">
+                    <p>你的问题可能已经有答案</p>
+                    <ul class="list-unstyled">
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">问题补充(选填):</label>
+                    <div class="mde-edit">
+                        <div id="mde-button-bar"></div>
+                        <textarea class="mde-input form-control autosize" id="id_body" rows="15" name="body">{{ question.body|default:'' }}</textarea>
+                    </div>
+                </div>
+                 <span class="btn btn-default fileinput-button">
+                    <span>上传附件</span>
+                    <input id="fileupload" type="file" name="file" multiple>
+                </span>
+                <span>允许 : jpg,jpeg,png,gif,zip,doc,docx,rar,pdf,psd,tar.gz, 大小:10M</span>
+                <div class="margin-bottom-10"></div>
+                <div class="row upload-files-preview" id="files">
+                    {% for attachment in  questionattachment_set %}
+                        <div class="col-xs-4 file-item">
+                            <div class="con">
+                                <div class="preview">
+                                    {% autoescape off %}
+                                        {{ attachment.attachment|attachment_preview }}
+                                    {% endautoescape %}
+                                </div>
+                                {{ attachment.attachment.source_filename }}
+                                <div class="meta">
+                                    <a class="install" data-id="{{ attachment.attachment.id }}" href="javascript:;">插入</a>
+                                    <a class="del" data-id="{{ attachment.attachment.id }}" href="javascript:;">删除</a>
+                                    <input type="hidden" name="attachment" value="{{ attachment.attachment.id }}">
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr/>
+                <div id="mde-preview" class="hide wmd-panel well mde-preview"></div>
+                <div class="form-group">
+                    <label for="id_tags">问题标签: </label>
+                    <div id="related_tag"></div>
+                    <div class="tagsContainer">
+                        <input type="text" value="{% for tag in question.tag.all %}{{ tag.title }},{% endfor %}" class="form-control" name="tags1" id="id_tags" >
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-success">发起您的问题</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+        <div class="wd-block">
+            <h4 ><span>提问规范</span></h4>
+            <div class="margin-bottom-10"></div>
+            <p>以下要点可以方便你更快寻求到靠谱答案：</p>
+            <dl>
+                <dt>1.请先搜索是否已经有同类问题得到解决;</dt>
+            </dl>
+            <dl>
+                <dt>2.请在提问时精确描述你的问题，不要写与问题无关的内容，也不要用“详情请入内”之类无意义的语句；</dt>
+            </dl>
+            <dl>
+                <dt>3.提问时，@相关领域的人，会让他们更快关注到你的问题。</dt>
+            </dl>
+        </div>
+    </div>
+</div>
+
+
+
+    <script id="related-template" type="text/template">
+        <% _.each(objects, function(q){ %>
+        <li>
+            <a target="_blank" href="<%=q.absolute_url%>"><%=q.title%></a>
+        </li>
+        <%})%>
+    </script>
+    <script id="related-tag-template" type="text/template">
+        <ul class="list-unstyled tags-ul">
+            <% _.each(tags, function(tag){ %>
+                <li><a class="tag-item" href="javascript:;"><i class="fa fa-tags"></i> <%=tag%></a></li>
+            <%})%>
+        </ul>
+    </script>
+    <script id="create-item-template" type="text/template">
+        <div class='col-sm-4 tag-item'>
+            <div class='tag-img'><img class='img-rounded' src='<%=avatar%>' alt=''></div>
+            <div>
+                <h5><i class='fa fa-tags'></i> <%=title%></h5>
+                <%if(is_new){ %>
+                <p>创建新标签</p>
+                <%}else{ %>
+                <p><%=question_count%>个问题</p><p>891 本周, 5601 30 天新</p>
+                <%}%>
+            </div>
+        </div>
+    </script>
+
+
+{% endblock %}

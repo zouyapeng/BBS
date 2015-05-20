@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/setting.css"/>
+     <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/css/bootstrapValidator.css">
+{% endblock %}
+{% block js %}
+    {{ block.super }}
+     <script type="text/javascript" src="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+    <script src="{{ STATIC_URL }}js/setting.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-wrap clearfix">
+        <div class="wd-head clearfix">
+            <h2 class="pull-left"><i class="fa fa-cog"></i> 用户设置</h2>
+            <ul class="nav nav-tabs pull-right ">
+                <li {% ifequal tag 'profile' %} class="active"{% endifequal %}><a href="{% url 'account:setting' 'profile' %}">基本资料</a></li>
+                <li {% ifequal tag 'security' %} class="active"{% endifequal %}><a href="{% url 'account:setting' 'security' %}">安全设置</a></li>
+            </ul>
+        </div>
+        {% block tab-content %}
+        {% endblock %}
+        </div>
+{% endblock %}

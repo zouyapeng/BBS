@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/login.css"/>
+{% endblock %}
+{% block js %}
+     <script type="text/javascript" src="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js"></script>
+     <script type="text/javascript" src="{{ STATIC_URL }}bower_components/bootstrapvalidator/dist/js/language/zh_CN.js"></script>
+    <script src="{{ STATIC_URL }}js/login-register.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="content-wrap clearfix col-sm-8 col-sm-offset-2">
+        <form method="post"
+              action="{% url 'login_api' resource_name="user" api_name='account' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}"
+              data-validator id="login_form" class="col-sm-6">
+            <div class="form-group">
+                <input
+                        data-bv-notempty="true"
+                        data-bv-error="true"
+                        data-bv-notempty-message="用户名不能为空"
+                        type="text" name="username" class="form-control" id="id_username" placeholder="用户名">
+            </div>
+              <div class="form-group">
+                    <input type="password" name="password"
+
+                        data-bv-notempty="true"
+                        data-bv-notempty-message="密码不能为空"
+                           class="form-control" id="id_password" placeholder="密码">
+              </div>
+              <div class="form-group row">
+                  <div class="col-sm-6 checkbox">
+                      <label><input name="remember_me" type="checkbox"/>记住我</label>
+                  </div>
+                  <div class="col-sm-6 text-right">
+                      <button type="submit" class="btn btn-success">登陆</button>
+                  </div>
+              </div>
+        </form>
+        <div class="col-sm-6"></div>
+    </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+
+
+.notifications{
+  .notification{
+    position: relative;
+    padding: 15px 0;
+    line-height: 20px;
+    border-top: 1px dotted #E2E2E2;
+    a{
+      text-decoration: none;
+    }
+    i.tips{
+
+      width: 6px;
+      height: 6px;
+      border-radius: 6px;
+      background-color: #ff5428;
+      position: absolute;
+      right: 0;
+      top: 15px;
+      display: none;
+    }
+    &.unread{
+      .verb{
+        font-weight: bold;
+      }
+
+      i.tips{
+        display: block;
+      }
+    }
+    &:first-child{
+      border-top: none;
+    }
+  }
+}

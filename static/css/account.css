@@ -1,0 +1,144 @@
+.transition-all {
+  -webkit-transition: all 0.35s ease;
+  -moz-transition: all 0.35s ease;
+  -o-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  -ms-transition: all 0.35s ease;
+}
+.container-wrap .content-wrap .wd-body.user-info-sub {
+  min-height: 140px;
+  padding: 20px 20px 20px 140px;
+  border-bottom: 1px solid #e6e6e6;
+  overflow: hidden;
+  position: relative;
+}
+.container-wrap .content-wrap .wd-body.user-info-sub .info-avatar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+.container-wrap .content-wrap .wd-body.user-info-sub .info-avatar img {
+  max-height: 100%;
+}
+.container-wrap .content-wrap .wd-body.user-info-sub .profile,
+.container-wrap .content-wrap .wd-body.user-info-sub .focus_tag {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.container-wrap .content-wrap .wd-body.meta {
+  padding: 10px 20px 10px 20px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.container-wrap .content-wrap .wd-body.user-tab {
+  padding: 0px;
+}
+.container-wrap .content-wrap .wd-body.user-tab .nav-tabs {
+  padding: 0 20px;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content {
+  padding: 10px 0;
+  border-top: 1px solid #e6e6e6;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content .tab-content {
+  padding: 10px 20px;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content .wd-item {
+  padding: 14px 0 14px 0px;
+  border-bottom: 1px solid #f5f5f5;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content .wd-item p {
+  margin-bottom: 10px;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content .wd-item .opt {
+  color: #ccc;
+  font-size: 12px;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content .wd-item .opt a {
+  color: #ccc;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content .tabs2 a {
+  text-decoration: none;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content .tabs2 li.active {
+  font-weight: bold;
+}
+.container-wrap .content-wrap .wd-body.user-tab .tab-content .tabs2 li.active a {
+  color: #000;
+}
+@media (max-width: 768px) {
+  .article-list .article-item {
+    padding: 14px 0 14px 0px;
+  }
+}
+.article-list .article-item .num span {
+  line-height: 18px;
+  text-align: center;
+  background: #f4f4f4;
+  color: #999;
+  display: block;
+  border-radius: 10px;
+  padding: 4px 0;
+}
+.article-list .article-item .num span em {
+  display: block;
+  font-style: normal;
+}
+@media (min-width: 68px) {
+  .article-list .article-item {
+    padding: 14px 0 14px 0px;
+  }
+}
+.attention-content .item h4 {
+  margin: 0 ;
+}
+.attention-content .item h4 a {
+  font-size: 14px;
+}
+.attention-content .focus-content .item {
+  position: relative;
+  padding: 14px 0 14px 50px;
+}
+.attention-content .focus-content .item .tag-img {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 40px;
+  height: 40px;
+}
+.attention-content .question-content .item {
+  position: relative;
+  padding: 14px 0 14px 50px;
+  border-bottom: 1px solid #F5F5F5;
+}
+.attention-content .question-content .item .contribute {
+  font-size: 12px;
+  margin-left: 20px;
+  position: relative;
+}
+.attention-content .question-content .item .contribute span {
+  position: absolute;
+  right: 0;
+  top: -20px;
+}
+.attention-content .question-content .item .contribute ul {
+  margin: 0;
+}
+.attention-content .question-content .item .contribute li {
+  padding: 0;
+}
+.attention-content .question-content .item .contribute li img {
+  width: 24px;
+  height: 24px;
+}
+.attention-content .question-content .item a.avatar {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 40px;
+  height: 40px;
+}
+.right-sidebar .focus_users img {
+  width: 24px;
+  height: 24px;
+}

@@ -1,0 +1,23 @@
+{% load home_tags %}
+<div class="li-avatar row">
+    <a class="avatar hidden-xs" href="{{ obj.content_object.user.get_absolute_url }}">
+        <img class="img-rounded" src="{{ MEDIA_URL }}{{ obj.content_object.user.avatar }}" alt="">
+    </a>
+      <div class="title">
+          <a href="{{ obj.content_object.get_absolute_url }}">{% summary_highlight obj.content_object.title wd_list %}</a>
+      </div>
+      <div class="info c_999">
+          {% summary_highlight obj.content_object.body wd_list %}
+      </div>
+      <div class="info c_999">
+      <em><a href="{% url "account:detail" obj.content_object.user.username %}">{{ obj.content_object.user }}</a></em>
+        <em>于 <span >{% wenda_time obj.content_object.created  %}</span> 发表</em>
+        <a  href="{% url 'article:list' %}?forum={{ obj.content_object.forum.id }}">{{ obj.content_object.forum }}</a>
+        {% with reply=obj.content_object.get_last_reply %}
+        {% if reply %}
+        <em >最后回复 <span >{% wenda_time reply.created  %}</span></em>
+        {% endif %}
+        {% endwith %}
+        <em class="hidden-sm hidden-md hidden-lg">{{ obj.content_object.reply_set.count }} 个回复</em>
+      </div>
+</div>

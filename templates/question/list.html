@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% load pagination_tags %}
+{% load home_tags %}
+{% block title %}问题{% endblock %}
+
+
+{% block content %}
+<div class="content-wrap clearfix">
+    <div class="wd-left col-sm-12 col-md-9">
+        <div class="wd-head clearfix">
+            <h2 class="pull-left"><i class="fa fa-list-ul"></i> 问题</h2>
+            <ul class="nav nav-tabs pull-right hidden-xs hidden-sm">
+                <li {% ifequal request.GET.order_by 'unresponsive' %} class="active" {% endifequal %}><a href="{% url 'question:list' %}?order_by=unresponsive">等待回复</a></li>
+                <li {% ifequal request.GET.order_by 'hot' %} class="active" {% endifequal %}><a href="{% url 'question:list' %}?order_by=hot">热门</a></li>
+                <li {% if not request.GET.order_by %} class="active" {% endif %}><a href="{% url 'question:list' %}">最新</a></li>
+            </ul>
+        </div>
+        <div class="wd-list wd-body">
+            {% autopaginate question_list DEFAULT_PAGINATION.question %}
+            {% for question in question_list %}
+            <div class="media wd-item">
+                <div class="media-left avatar hidden-xs">
+                    <a href="{{ question.user.get_absolute_url }}">
+                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ question.user.avatar }}" alt="">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h5 class="user-name"><a href="{{ question.get_absolute_url }}">{{ question.title }}</a></h5>
+                    {% with contributes=question.get_contribute %}
+                    <div class="contribute pull-right hidden-xs">
+                    {% if contributes %}
+                        <span>贡献</span>
+                        <ul class="list-inline">
+                            {% for contribute in contributes %}
+                            <li><a href="{{ contribute.get_absolute_url }}"><img class="img-circle" src="{{ MEDIA_URL }}{{ contribute.avatar }}"></a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <a href="{{ question.get_absolute_url }}#answers">回复</a>
+                    {% endif %}
+                    </div>
+                    {% endwith %}
+                    <div class="opt">
+                        {% with last_answer=question.get_last_answer %}
+                            {% if last_answer %}
+                                <a class="wd-user-name" href="{{ last_answer.user.get_absolute_url }}">{{ last_answer.user }}</a> 回复了问题
+                            {% else %}
+                        <a class="wd-user-name" href="{{ question.user.get_absolute_url }}">{{ question.user }}</a> 发起问题
+                            {% endif %}
+				        <span>• {{ question|focus_count }} 人关注 • {{ question.answer_set.count }} 个回复 • {{ question|history }} 次浏览 • {% if last_answer %}{% wenda_time last_answer.created  %}{% else %}{% wenda_time question.created  %}{% endif %} </span>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="text-center">
+                {% paginate %}
+            </div>
+        </div>
+    </div>
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+        <div class="wd-block">
+            <h4><span>新增答案</span></h4>
+            {% for answer in new_answers %}
+            <dl>
+                <dt><a href="{{ answer.user.get_absolute_url }}">{{ answer.user.username }}</a>  回答 <a href="{{ answer.question.get_absolute_url }}">{{ answer.question.title }}</a></dt>
+                <dd>{% wenda_time answer.last_answer_date %}</dd>
+            </dl>
+            {% endfor %}
+        </div>
+        <div class="wd-block">
+            <h4><span>热点标签</span> <a class="pull-right" href="{% url 'tag:tag_list' %}">更多&gt;</a></h4>
+            <ul class="list-unstyled tags-ul margin-bottom-30 wd-block-padding">
+                {% for tag in popular %}
+                <li><a class="tag-item" href="{% url 'tag:tag_detail' tag.2 %}"><i class="fa fa-tags"></i> {{ tag.2 }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

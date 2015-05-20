@@ -1,0 +1,31 @@
+{
+  "name": "jquery.counterup",
+  "version": "0.0.0",
+  "main": "jquery.counterup.min.js",
+  "homepage": "https://github.com/cmincarelli/jquery.counterup",
+  "authors": [
+    "Chris Mink <chrism-air@local>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_cacheHeaders": {
+    "ETag": "\"f6d93399d3a5156e7599166e33c25bcdaa26688a\"",
+    "Content-Type": "application/zip",
+    "Content-Disposition": "attachment; filename=jquery.counterup-master.zip"
+  },
+  "_release": "e-tag:f6d93399d",
+  "_source": "https://github.com/cmincarelli/jquery.counterup/archive/master.zip",
+  "_target": "*",
+  "_originalSource": "https://github.com/cmincarelli/jquery.counterup/archive/master.zip",
+  "_direct": true
+}

@@ -1,0 +1,12 @@
+{% load home_tags %}
+<div class="li-avatar row">
+    <a class="avatar hidden-xs" href="{{ obj.content_object.get_absolute_url }}">
+        <img class="img-rounded" src="{{ MEDIA_URL }}{{ obj.content_object.avatar }}" alt="">
+    </a>
+      <div class="title">
+          <a class="tag-item" href="{{ obj.content_object.get_absolute_url }}"> <i class="fa fa-tags"></i>{% summary_highlight obj.content_object.title wd_list %}</a>
+      </div>
+      <div class="info c_999">
+          {{ obj.content_object.question_set.count }}个问题 {{ obj.content_object.article_set.count }}篇文章  {{ obj.content_object.get_week_count }} 本周, {{ obj.content_object.get_30_count }} 30 天
+      </div>
+</div>

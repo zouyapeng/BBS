@@ -1,0 +1,56 @@
+.article-title {
+  padding-right: 90px;
+  position: relative;
+  border-bottom: solid 1px #eee;
+}
+.article-title h2 {
+  font-size: 20px;
+}
+.article-title .operate {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+.reply-head {
+  border-bottom: 1px solid #e6e6e6;
+}
+.replies .reply-item {
+  position: relative;
+  padding: 14px 0;
+  border-bottom: 1px solid #F5F5F5;
+}
+.replies .reply-item .user-name {
+  margin: 0 0px 5px 0px;
+  font-size: 12px;
+  color: #666;
+}
+.replies .reply-item .user-name a {
+  color: #666;
+}
+.replies .reply-item .media-left {
+  min-width: 50px;
+}
+.replies .reply-item .media-left img {
+  width: 40px;
+  height: 40px;
+}
+.opt .btn {
+  text-decoration: none;
+  color: #999;
+}
+.opt .btn:hover {
+  color: #46b8da;
+}
+.sponsors dt,
+.sponsors img {
+  width: 32px;
+  height: 32px;
+}
+.sponsors dd {
+  margin-left: 10px;
+  font-size: 12px;
+  font-weight: normal;
+}
+.sponsors dd a {
+  text-decoration: none;
+}

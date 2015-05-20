@@ -1,0 +1,100 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+<div class="content-wrap clearfix">
+
+    <div class="wd-left col-sm-12 col-md-9">
+        <div class="wd-head clearfix">
+            <h2 class="pull-left"><i class="fa fa-list-ul"></i> 问题</h2>
+            <ul class="nav nav-tabs pull-right hidden-xs hidden-sm">
+                <li><a href="">等待回复</a></li>
+                <li><a href="" id="sort_control_hot">热门</a></li>
+                <li><a href="">推荐</a></li>
+                <li class="active"><a href="">最新</a></li>
+            </ul>
+        </div>
+        <div class="wd-list wd-body">
+            <div class="media wd-item">
+                <div class="media-left avatar hidden-xs">
+                    <a href="#">
+                        <img class="img-rounded" src="http://wenda.bootcss.com/static/common/avatar-max-img.png" alt="">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4><a href="{% url "question:detail" 1 %}">222222222222222</a></h4>
+                    <div class="opt">
+                        <a class="wd-user-name" href="" >洎掵芣汎哋蕏</a>
+				        <span>回复了问题 • 3 人关注 • 2 个回复 • 72 次浏览 • 23 小时前</span>
+                    </div>
+                </div>
+            </div>
+            <div class="media wd-item">
+                <div class="media-left avatar hidden-xs hidden-sm">
+                    <a href="#">
+                        <img class="img-rounded" src="{{ MEDIA_URL }}{{ question.user.avatar }}" alt="">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">Media heading</h4>
+                    222222222222
+                </div>
+            </div>
+            <div class="media wd-item">
+                <div class="media-left avatar hidden-xs hidden-sm">
+                    <a href="#">
+                        <img class="img-rounded" src="http://wenda.bootcss.com/static/common/avatar-max-img.png" alt="">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">Media heading</h4>
+                    222222222222
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-sidebar col-sm-12 col-md-3 hidden-xs hidden-sm">
+        <div class="wd-block">
+            <h4><span>热点问题</span> <a class="pull-right" href="">更多&gt;</a></h4>
+            <dl>
+                <dt><a href="">Cloning non-standard layout SVN repo to git</a></dt>
+                <dd>3 人关注 • 2 个回复</dd>
+            </dl>
+            <dl>
+                <dt><a href="">Cloning non-standard layout SVN repo to git</a></dt>
+                <dd>222</dd>
+            </dl>
+            <dl>
+                <dt><a href="">Cloning non-standard layout SVN repo to git</a></dt>
+                <dd>222</dd>
+            </dl>
+        </div>
+        <div class="wd-block">
+            <h4><span>热点标签</span> <a class="pull-right" href="">更多&gt;</a></h4>
+            <ul class="list-unstyled tags-ul margin-bottom-30">
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Business</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Music</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Internet</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Money</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Google</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> TV Shows</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Education</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> People</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> People</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Math</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Photos</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Electronics</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Apple</a></li>
+                <li><a class="tag-item" href="#"><i class="fa fa-tags"></i> Canada</a></li>
+            </ul>
+        </div>
+        <div class="wd-block">
+            <h4><span>热点问题</span> <a class="pull-right" href="">更多&gt;</a></h4>
+            <dl>
+                <dt><a href="">Cloning non-standard layout SVN repo to git</a></dt>
+                <dd>222</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}
